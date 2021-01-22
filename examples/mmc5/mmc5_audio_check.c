@@ -108,6 +108,7 @@ uint8_t val;
 
 uint8_t notes[5];
 uint8_t noteon[5];
+uint8_t duty[5];
 uint8_t note_num;
 
 // supply an empty FamiToneUpdate, overiding the routine in famitone.s.
@@ -123,9 +124,13 @@ void main(void)
     pal_all(palette); //set palette for sprites
     oam_size(1);
 
-    vram_puts(10, 3, "Hello World!");
-    vram_puts(9, 12, "APU Demo");
-    vram_puts(0, 14, "TRI P1  P2  M1  M2");
+    vram_puts(9, 3, "APU+MMC5 Demo");
+    vram_puts(0, 5, "L/R: Change channel");
+    vram_puts(0, 6, "U/D: Change note");
+    vram_puts(0, 7, "A: mute/unmute channel");
+    vram_puts(0, 8, "SEL: change duty cycle");
+    vram_puts(0, 13, "TRI P1  P2  M1  M2");
+    vram_puts(0, 14, "duty 0   0   0   0");
 
     apu_init();
     notes[0] = 15 - 12;
@@ -172,19 +177,26 @@ void main(void)
         ppu_macro_byte('^');
 
         // If up/down was pressed, change the note being played.
-        if (pad & (PAD_UP | PAD_DOWN | PAD_A)) {
+        if (pad & (PAD_UP | PAD_DOWN | PAD_A | PAD_SELECT)) {
             if (pad & PAD_UP) {
                 ++notes[note_num];
             } else if (pad & PAD_DOWN) {
                 --notes[note_num];
             } else if (pad & PAD_A) {
                 noteon[note_num] = !noteon[note_num];
+            } else if (pad & PAD_SELECT) {
+                duty[note_num] = (duty[note_num] + 1) & 3;
             }
 
             apu_play(note_num,
                      noteon[note_num] ?  notes[note_num] : 0xFF,
-                     2);
+                     duty[note_num]);
 
+            if (note_num > 0) {
+                ppu_macro_word(0x2001 + 14*32 + note_num*4);
+                ppu_macro_byte(1);
+                ppu_macro_byte('0'+duty[note_num]);
+            }
             ppu_macro_word(0x2000 + 15*32 + note_num*4);
             ppu_macro_byte(3);
             if (noteon[note_num]) {

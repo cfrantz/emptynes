@@ -7,7 +7,7 @@ SRCS=../chars.c
 OBJS=$(SRCS:.c=.o)
 ASMS=$(SRCS:.c=.s)
 
-MAPPER=../mappers/mmc3
+MAPPER=../mappers/vrc6
 
 hello.nes: hello.o hello_music.o $(OBJS)
 	ld65 -C $(MAPPER)/nes.cfg -vm --mapfile hello.map -o $@ \

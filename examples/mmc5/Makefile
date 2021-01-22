@@ -3,6 +3,9 @@ include ../../toolchain.mk
 .PHONY: clean 
 .PRECIOUS: *.o
 
+all: mmc5_scanline_split.nes mmc5_vsplit.nes mmc5_extram_fillmode.nes mmc5_audio_check.nes
+	 
+
 TOPDIR=../..
 SRCS=../../chars.c
 OBJS=$(SRCS:.c=.o)
