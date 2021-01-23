@@ -84,7 +84,7 @@ void __fastcall__ ppu_waitnmi(void);
 
 //play a music in FamiTone format
 
-void __fastcall__ music_play(const unsigned char *data);
+// void __fastcall__ music_play(const unsigned char *data);
 
 //stop music
 

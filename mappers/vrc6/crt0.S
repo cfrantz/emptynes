@@ -215,8 +215,8 @@ detectNTSC:
 
 	jsr _ppu_off
 
-	lda <NTSCMODE
-	jsr FamiToneInit
+	;lda <NTSCMODE
+	;jsr FamiToneInit
 
 	.if(FT_DPCM_ENABLE)
 	ldx #<music_dpcm
@@ -224,11 +224,11 @@ detectNTSC:
 	jsr FamiToneSampleInit
 	.endif
 
-	.if(FT_SFX_ENABLE)
-	ldx #<sounds_data
-	ldy #>sounds_data
-	jsr FamiToneSfxInit
-	.endif
+	;.if(FT_SFX_ENABLE)
+	;ldx #<sounds_data
+	;ldy #>sounds_data
+	;jsr FamiToneSfxInit
+	;.endif
 
 	.if(!SPEED_FIX)
 	lda #0

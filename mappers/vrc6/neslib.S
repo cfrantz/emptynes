@@ -11,8 +11,8 @@
 	.export _scroll0, _scroll1
 	.export _bank_spr,_bank_bg
 	.export _vram_read,_vram_write
-	.export _music_play,_music_stop,_music_pause
-	.export _sfx_play
+	;.export _music_play,_music_stop,_music_pause
+	;.export _sfx_play
 	.export _pad_poll,_pad_trigger,_pad_state
 	.export _rand8,_rand16,_set_rand
     .export _ppu_macro_byte, _ppu_macro_word
@@ -20,6 +20,7 @@
 	.export _vram_adr,_vram_put,_vram_fill,_vram_inc
 	.export _memcpy,_memfill,_delay
     .import _ppu_macro_len, _ppu_macro
+	.import _music_nmi_update
 
 
 ;NMI handler
@@ -123,7 +124,7 @@ nmi:
     sta PPU_CTRL
 
 	inc <FRAMECNT1
-	;jsr FamiToneUpdate
+	jsr _music_nmi_update
 
 @nmiexit:
 	pla
@@ -746,41 +747,41 @@ _vram_write:
 
 
 
-;void __fastcall__ music_play(const unsigned char *data);
-
-_music_play:
-	stx <PTR
-	tax
-	ldy <PTR
-	jmp FamiToneMusicStart
-
-
-
-;void __fastcall__ music_stop(void);
-
-_music_stop=FamiToneMusicStop
-
-
-
-;void __fastcall__ music_pause(unsigned char pause);
-
-_music_pause=FamiToneMusicPause
-
-
-
-;void __fastcall__ sfx_play(unsigned char sound,unsigned char channel);
-
-_sfx_play:
-	and #$03
-	tax
-	lda @sfxPriority,x
-	tax
-	jsr popa
-	jmp FamiToneSfxStart
-
-@sfxPriority:
-	.byte FT_SFX_CH0,FT_SFX_CH1,FT_SFX_CH2,FT_SFX_CH3
-
+;;; ;void __fastcall__ music_play(const unsigned char *data);
+;;; 
+;;; _music_play:
+;;; 	stx <PTR
+;;; 	tax
+;;; 	ldy <PTR
+;;; 	jmp FamiToneMusicStart
+;;; 
+;;; 
+;;; 
+;;; ;void __fastcall__ music_stop(void);
+;;; 
+;;; _music_stop=FamiToneMusicStop
+;;; 
+;;; 
+;;; 
+;;; ;void __fastcall__ music_pause(unsigned char pause);
+;;; 
+;;; _music_pause=FamiToneMusicPause
+;;; 
+;;; 
+;;; 
+;;; ;void __fastcall__ sfx_play(unsigned char sound,unsigned char channel);
+;;; 
+;;; _sfx_play:
+;;; 	and #$03
+;;; 	tax
+;;; 	lda @sfxPriority,x
+;;; 	tax
+;;; 	jsr popa
+;;; 	jmp FamiToneSfxStart
+;;; 
+;;; @sfxPriority:
+;;; 	.byte FT_SFX_CH0,FT_SFX_CH1,FT_SFX_CH2,FT_SFX_CH3
+;;; 
 
 
 ;unsigned char __fastcall__ pad_poll(unsigned char pad);
@@ -1098,4 +1099,4 @@ palBrightTable:
 	.byte $30,$30,$30,$30,$30,$30,$30,$30,$30,$30,$30,$30,$30,$30,$30,$30
 	.byte $30,$30,$30,$30,$30,$30,$30,$30,$30,$30,$30,$30,$30,$30,$30,$30
 
-.include "famitone.S"
+;;; .include "famitone.S"

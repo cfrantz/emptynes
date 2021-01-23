@@ -213,9 +213,9 @@ detectNTSC:
 	jsr _ppu_off
 
 	lda <NTSCMODE
-	ldx #<default_music_data
-	ldy #>default_music_data
-	jsr FamiToneInit
+;	ldx #<default_music_data
+;	ldy #>default_music_data
+;	jsr FamiToneInit
 
 ;	.if(FT_DPCM_ENABLE)
 ;	ldx #<music_dpcm

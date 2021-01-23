@@ -13,6 +13,14 @@ ASMS=$(SRCS:.c=.s)
 
 MAPPER=../../mappers/mmc5
 
+hello.nes: hello.o music.o z2-mmc5.o $(OBJS)
+	ld65 -C $(MAPPER)/nes.cfg -vm --mapfile hello.map -o $@ \
+		hello.o $(OBJS) \
+		music.o z2-mmc5.o \
+		$(MAPPER)/libinit.a \
+		../../util/libutil.a \
+		$(NESLIB)
+
 mmc5_scanline_split.nes: mmc5_scanline_split.o $(OBJS)
 	ld65 -C $(MAPPER)/nes.cfg -vm --mapfile mmc5_scanline_split.map -o $@ \
 		mmc5_scanline_split.o $(OBJS) \

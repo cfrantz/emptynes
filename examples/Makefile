@@ -7,19 +7,12 @@ SRCS=../chars.c
 OBJS=$(SRCS:.c=.o)
 ASMS=$(SRCS:.c=.s)
 
-MAPPER=../mappers/vrc6
+MAPPER=../mappers/mmc3
 
 hello.nes: hello.o hello_music.o $(OBJS)
 	ld65 -C $(MAPPER)/nes.cfg -vm --mapfile hello.map -o $@ \
 		hello.o $(OBJS) \
 		hello_music.o \
-		$(MAPPER)/libinit.a \
-		../util/libutil.a \
-		$(NESLIB)
-
-vrc6_audio_check.nes: vrc6_audio_check.o $(OBJS)
-	ld65 -C $(MAPPER)/nes.cfg -vm --mapfile vrc6_audio_check.map -o $@ \
-		vrc6_audio_check.o $(OBJS) \
 		$(MAPPER)/libinit.a \
 		../util/libutil.a \
 		$(NESLIB)
