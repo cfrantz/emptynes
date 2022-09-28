@@ -4,10 +4,6 @@
 
 #include "util/nesutil.h"
 
-void __fastcall__ music_init(const void* data);
-void __fastcall__ music_play(uint8_t song);
-
-
 const unsigned char palette[32]={
     // Background palette
     0x22, 0x03, 0x23, 0x30, // skyblue, dark purple, med purple, white
@@ -21,9 +17,6 @@ const unsigned char palette[32]={
     0x0F, 0x02, 0x11, 0x20, // xx, blue, light blue, white
     0x0F, 0x2c, 0x28, 0x30, // xx, cyan, yellow, white
 };
-
-extern const char z2_extract_music_data[];
-extern const char untitled_music_data[];
 
 uint16_t framenum;
 uint8_t player_pad;
@@ -42,8 +35,7 @@ void dobrk(void) {
 
 void main(void)
 {
-    music_init(untitled_music_data);
-    bank_bg(1);
+    bank_bg(0);
     bank_spr(0);
     ppu_off();
     pal_all(palette); //set palette for sprites
@@ -64,10 +56,9 @@ void main(void)
         vram_put(kHex[val&15]);
     }
 
-    set_split(13*8-1);
+    //set_split(13*8-1);
     ppu_on_all();
 
-    music_play(0);
     for(framenum=0;;++framenum) {
         ppu_waitnmi();
         oam_clear();

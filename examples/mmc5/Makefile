@@ -13,13 +13,35 @@ ASMS=$(SRCS:.c=.s)
 
 MAPPER=../../mappers/mmc5
 
-hello.nes: hello.o music.o z2-mmc5.o $(OBJS)
+hello.nes: hello.o music.o z2-mmc5.o scale.o $(OBJS)
 	ld65 -C $(MAPPER)/nes.cfg -vm --mapfile hello.map -o $@ \
 		hello.o $(OBJS) \
-		music.o z2-mmc5.o \
+		music.o z2-mmc5.o scale.o\
 		$(MAPPER)/libinit.a \
 		../../util/libutil.a \
 		$(NESLIB)
+
+do_nothing.nes: do_nothing.o no_music.o $(OBJS)
+	ld65 -C $(MAPPER)/nes.cfg -vm --mapfile do_nothing.map -o $@ \
+		do_nothing.o no_music.o $(OBJS) \
+		$(MAPPER)/libinit.a \
+		../../util/libutil.a \
+		$(NESLIB)
+
+cftest.nes: cftest.o cfplayer.o cfthunk.o z2songs.o cf_sfx.o $(OBJS)
+	ld65 -C $(MAPPER)/nes.cfg -vm \
+		--mapfile cftest.map \
+		-o $@ \
+	    cfplayer.o \
+	    cfthunk.o \
+		cftest.o \
+		z2songs.o \
+		cf_sfx.o \
+		$(OBJS) \
+		$(MAPPER)/libinit.a \
+		../../util/libutil.a \
+		$(NESLIB)
+#		z2_title.o 
 
 mmc5_scanline_split.nes: mmc5_scanline_split.o $(OBJS)
 	ld65 -C $(MAPPER)/nes.cfg -vm --mapfile mmc5_scanline_split.map -o $@ \
