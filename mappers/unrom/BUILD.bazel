@@ -1,0 +1,31 @@
+package(default_visibility = ["//visibility:public"])
+
+cc_library(
+    name = "linker_script",
+    linkopts = [
+        "-Lexternal/llvm_mos_files/mos-platform/nes-unrom/lib",
+        "-T $(location @llvm_mos_files//:mos-platform/nes-unrom/lib/link.ld)",
+    ],
+    deps = [
+        "@llvm_mos_files//:mos-platform/nes-unrom/lib/link.ld",
+        "@llvm_mos_files//:mos-platform/nes-unrom/lib/common.ld",
+        "@llvm_mos_files//:mos-platform/nes-unrom/lib/_prg-rom-banked.ld",
+        "@llvm_mos_files//:mos-platform/nes-unrom/lib/prg-rom.ld",
+        "@llvm_mos_files//:mos-platform/nes-unrom/lib/_rompoke.ld",
+    ],
+)
+
+cc_import(
+    name = "unrom",
+    hdrs = [
+        "@llvm_mos_files//:mos-platform/nes-unrom/include/mapper.h",
+    ],
+    static_library = "@llvm_mos_files//:mos-platform/nes-unrom/lib/libc.a",
+    objects = [
+        "@llvm_mos_files//:mos-platform/nes-unrom/lib/crt0.o",
+        "@llvm_mos_files//:mos-platform/nes-unrom/lib/reset.o",
+    ],
+    deps = [
+        ":linker_script",
+    ],
+)

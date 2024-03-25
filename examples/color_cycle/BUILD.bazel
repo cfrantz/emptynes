@@ -1,0 +1,13 @@
+package(default_visibility = ["//visibility:public"])
+load("@crt//rules:cc.bzl", "platform_cc_binary")
+
+platform_cc_binary(
+    name = "color_cycle",
+    srcs = ["color_cycle.c"],
+    deps = [
+        "//mappers/unrom",
+        #"//mappers/mmc3",
+    ],
+    extension = "nes",
+    platform = "@crt//platforms/m6502:nintendo-nes",
+)

@@ -1,17 +1,40 @@
 package(default_visibility = ["//visibility:public"])
 
 cc_library(
-    name = "mmc3",
-    hdrs = ["mmc3.h"],
-    srcs = ["crt0.s"],
-    target_compatible_with = ["@crt//antique/cpu:m6502"],
+    name = "linker_script",
     linkopts = [
-        "-C", "$(location :mmc3.ld)",
+        "-Lexternal/llvm_mos_files/mos-platform/nes-mmc3/lib",
+        "-T $(location @llvm_mos_files//:mos-platform/nes-mmc3/lib/link.ld)",
     ],
     deps = [
-        "mmc3.ld",
-        "//neslib:globals",
-        "//util:compiler",
+        "@llvm_mos_files//:mos-platform/nes-mmc3/lib/link.ld",
+        "@llvm_mos_files//:mos-platform/nes-mmc3/lib/common.ld",
+        "@llvm_mos_files//:mos-platform/nes-mmc3/lib/_prg-rom-banked.ld",
+        "@llvm_mos_files//:mos-platform/nes-mmc3/lib/_reset.ld",
     ],
+)
 
+cc_library(
+    name = "banked-8",
+    srcs = [
+        "@llvm_mos_files//:mos-platform/nes-mmc3/lib/reset-banked-8.o",
+    ],
+    deps = [
+        "@llvm_mos_files//:mos-platform/nes-mmc3/lib/prg-rom-banked-8.ld",
+    ],
+)
+
+cc_import(
+    name = "mmc3",
+    hdrs = [
+        "@llvm_mos_files//:mos-platform/nes-mmc3/include/mapper.h",
+    ],
+    static_library = "@llvm_mos_files//:mos-platform/nes-mmc3/lib/libc.a",
+    objects = [
+        "@llvm_mos_files//:mos-platform/nes-mmc3/lib/crt0.o",
+    ],
+    deps = [
+        ":linker_script",
+        ":banked-8",
+    ],
 )
